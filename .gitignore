@@ -1,0 +1,22 @@
+# local private config
+config/backup.conf
+scripts/openwrt/config.env
+
+# generated data
+logs/*
+local-backups/pi/*
+local-backups/openwrt/*
+
+# keep empty dirs
+!logs/.gitkeep
+!local-backups/pi/.gitkeep
+!local-backups/openwrt/.gitkeep
+
+# local/editor noise
+.DS_Store
+*.log
+*.tmp
+*.cache
+__pycache__/
+.agents/
+.codex/
