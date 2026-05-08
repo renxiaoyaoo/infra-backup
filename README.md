@@ -19,6 +19,24 @@
 
 OpenWrt 不部署完整仓库，只由备份主机同步 `scripts/openwrt/` 里的运行文件过去。
 
+## 和其它仓库的关系
+
+这几个仓库按职责分开，不是互相替代：
+
+| 仓库 | 职责 | 例子 |
+| --- | --- | --- |
+| `dotfiles` | 管每台机器的用户级基础配置，由 chezmoi 应用。 | `.bashrc`、`.gitconfig`、`.ddns-go/.ddns_go_config.yaml` |
+| `raspberry-conf` | 管树莓派当前服务栈的部署配置。 | `docker-compose.yml`、Home Assistant、Mosquitto、Zigbee2MQTT |
+| `infra-backup` | 管备份流程，把树莓派和 OpenWrt 的关键状态打包并上传到远端。 | `scripts/02-backup-pi-local.sh`、restic、OpenWrt 备份脚本 |
+
+简单说：
+
+- `dotfiles` 负责“新机器怎么变成我的机器”。
+- `raspberry-conf` 负责“树莓派上跑哪些服务，怎么跑”。
+- `infra-backup` 负责“这些服务和路由器坏了以后怎么找回关键配置”。
+
+所以 `infra-backup` 不应该合并进 `raspberry-conf`。它是备份工具，应该可以备份 `raspberry-conf` 产生的服务状态，但不应该成为服务运行目录本身。
+
 ## 目录
 
 ```text
