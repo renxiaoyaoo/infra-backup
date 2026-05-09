@@ -12,18 +12,26 @@ OPENWRT_HOST="root@openwrt.lan"
 OPENWRT_REMOTE_DIR="/root/infra-backup"
 OPENWRT_LOCAL_DIR="$LOCAL_BACKUP_DIR/openwrt"
 
-RASPBERRY_CONF_DIR="${RASPBERRY_CONF_DIR:-$HOME/raspberry-conf}"
 NETWORK_CONF_DIR="${NETWORK_CONF_DIR:-$HOME/network}"
 CADDY_CONF="${CADDY_CONF:-$HOME/caddy/Caddyfile}"
 
 BACKUP_PATHS="
-$RASPBERRY_CONF_DIR/.env
-$RASPBERRY_CONF_DIR/zigbee2mqtt/data/coordinator_backup.json
-$RASPBERRY_CONF_DIR/zigbee2mqtt/data/database.db
-$RASPBERRY_CONF_DIR/zigbee2mqtt/data/state.json
-$RASPBERRY_CONF_DIR/zigbee2mqtt/data/external_converters
-$RASPBERRY_CONF_DIR/ha/config/backups
-$RASPBERRY_CONF_DIR/mosquitto/data
+$HOME/docker-compose.yml
+$HOME/.env
+$HOME/ha/Dockerfile.ha
+$HOME/ha/config/configuration.yaml
+$HOME/ha/config/secrets.yaml
+$HOME/ha/config/automations.yaml
+$HOME/ha/config/scripts.yaml
+$HOME/ha/config/scenes.yaml
+$HOME/ha/config/backups
+$HOME/mosquitto/config
+$HOME/mosquitto/data
+$HOME/zigbee2mqtt/data/configuration.yaml
+$HOME/zigbee2mqtt/data/coordinator_backup.json
+$HOME/zigbee2mqtt/data/database.db
+$HOME/zigbee2mqtt/data/state.json
+$HOME/zigbee2mqtt/data/external_converters
 $HOME/.ddns-go/.ddns_go_config.yaml
 $NETWORK_CONF_DIR/docker-compose.yml
 $NETWORK_CONF_DIR/mihomo/config/config.yaml
