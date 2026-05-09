@@ -13,16 +13,12 @@ OPENWRT_REMOTE_DIR="/root/infra-backup"
 OPENWRT_LOCAL_DIR="$LOCAL_BACKUP_DIR/openwrt"
 
 BACKUP_PATHS="
-$HOME/raspberry-conf/docker-compose.yml
 $HOME/raspberry-conf/.env
-$HOME/raspberry-conf/ha/Dockerfile.ha
-$HOME/raspberry-conf/ha/config/configuration.yaml
-$HOME/raspberry-conf/mosquitto/config
-$HOME/raspberry-conf/zigbee2mqtt/data/configuration.yaml
 $HOME/raspberry-conf/zigbee2mqtt/data/coordinator_backup.json
 $HOME/raspberry-conf/zigbee2mqtt/data/database.db
 $HOME/raspberry-conf/zigbee2mqtt/data/state.json
 $HOME/raspberry-conf/zigbee2mqtt/data/external_converters
+$HOME/raspberry-conf/ha/config/backups
 $HOME/.ddns-go/.ddns_go_config.yaml
 $HOME/network/docker-compose.yml
 $HOME/network/mihomo/config/config.yaml
