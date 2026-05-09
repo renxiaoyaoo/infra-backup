@@ -8,6 +8,8 @@ LOG_DIR="$BASE/logs"
 LOCAL_BACKUP_DIR="$BASE/local-backups"
 RESTORE_DIR="$BASE/restore"
 
+TAR_IMAGE="${TAR_IMAGE:-caddy:2}"
+
 OPENWRT_HOST="root@openwrt.lan"
 OPENWRT_REMOTE_DIR="/root/infra-backup"
 OPENWRT_LOCAL_DIR="$LOCAL_BACKUP_DIR/openwrt"

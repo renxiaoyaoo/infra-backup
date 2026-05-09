@@ -70,11 +70,32 @@ PATHS
   echo "--- paths to backup ---"
   cat "$PATH_LIST"
 
-  tar \
-    --exclude-from="$EXCLUDE_FILE" \
-    -czf "$OUT" \
-    -T "$PATH_LIST" \
-    -C "$STAGE" meta
+  DOCKER_PATH_LIST="$STAGE/meta/path-list.docker.txt"
+  DOCKER_EXCLUDE_FILE="$STAGE/meta/exclude-list.docker.txt"
+  sed 's#^/##' "$PATH_LIST" > "$DOCKER_PATH_LIST"
+  sed 's#^/##' "$EXCLUDE_FILE" > "$DOCKER_EXCLUDE_FILE"
+
+  if command -v docker >/dev/null 2>&1 && docker image inspect "${TAR_IMAGE:-caddy:2}" >/dev/null 2>&1; then
+    echo "--- archive mode: docker root readonly tar (${TAR_IMAGE:-caddy:2}) ---"
+    docker run --rm \
+      --network none \
+      -v /:/host:ro \
+      -v "$STAGE":/stage:ro \
+      --entrypoint tar \
+      "${TAR_IMAGE:-caddy:2}" \
+      -czf - \
+      -X /stage/meta/exclude-list.docker.txt \
+      -C /host \
+      -T /stage/meta/path-list.docker.txt \
+      -C /stage meta > "$OUT"
+  else
+    echo "--- archive mode: local tar ---"
+    tar \
+      --exclude-from="$EXCLUDE_FILE" \
+      -czf "$OUT" \
+      -T "$PATH_LIST" \
+      -C "$STAGE" meta
+  fi
 
   chmod 600 "$OUT"
 

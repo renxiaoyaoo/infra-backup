@@ -34,6 +34,8 @@ chmod 600 config/backup.conf
 - 生成恢复验证日志：`/home/pi/infra-backup/logs/restore-test-2026-05-10-032614.log`
 - 恢复测试成功，备份包可以解开并列出关键文件。
 
+注意：部分 Docker volume 里的配置文件属于 root，例如 AdGuard Home 和 wg-easy 生成的文件。Pi 用户没有 sudo 免密权限，所以 Pi 本地备份默认使用本机已有的 `caddy:2` 镜像执行只读 `tar`，从宿主机 `/` 读取文件，再由 Pi 用户写出备份包。这样 cron 可以无人值守执行，同时不会修改被备份文件。
+
 ## 仓库里包含什么
 
 这些文件应该提交到 Git：
