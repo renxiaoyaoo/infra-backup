@@ -73,8 +73,8 @@ PATHS
   tar \
     --exclude-from="$EXCLUDE_FILE" \
     -czf "$OUT" \
-    -C "$STAGE" meta \
-    -T "$PATH_LIST"
+    -T "$PATH_LIST" \
+    -C "$STAGE" meta
 
   chmod 600 "$OUT"
 
