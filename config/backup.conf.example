@@ -18,6 +18,7 @@ CADDY_CONF="${CADDY_CONF:-$HOME/caddy/Caddyfile}"
 BACKUP_PATHS="
 $HOME/docker-compose.yml
 $HOME/.env
+$HOME/.cloudflared
 $HOME/ha/Dockerfile.ha
 $HOME/ha/config/configuration.yaml
 $HOME/ha/config/secrets.yaml
@@ -33,7 +34,18 @@ $HOME/zigbee2mqtt/data/database.db
 $HOME/zigbee2mqtt/data/state.json
 $HOME/zigbee2mqtt/data/external_converters
 $HOME/.ddns-go/.ddns_go_config.yaml
+$HOME/filebrowser/config
+$HOME/filebrowser/database
+$HOME/uptime-kuma/db-config.json
+$HOME/uptime-kuma/kuma.db
+$HOME/ha-95598/docker-compose.image.yml
+$HOME/ha-95598/.env
+$HOME/ha-95598/config
+$HOME/ha-95598/data
+$NETWORK_CONF_DIR/.env
 $NETWORK_CONF_DIR/docker-compose.yml
+$NETWORK_CONF_DIR/adguard/conf
+$NETWORK_CONF_DIR/wg-easy/data
 $NETWORK_CONF_DIR/mihomo/config/config.yaml
 $NETWORK_CONF_DIR/mihomo/config/proxies
 $NETWORK_CONF_DIR/mihomo/config/rules
