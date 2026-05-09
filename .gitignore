@@ -1,5 +1,6 @@
 # local private config
 config/backup.conf
+config/backup.conf.bak.*
 scripts/openwrt/config.env
 
 # generated data
