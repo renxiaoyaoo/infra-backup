@@ -87,6 +87,9 @@ $HOME/network/mihomo/config/GeoIP.dat
 $HOME/network/mihomo/config/GeoSite.dat
 $HOME/network/mihomo/config/cache.db
 $HOME/network/mihomo/config/geoip.metadb
+$HOME/ha-95598/data/captcha_samples
+$HOME/ha-95598/data/pages
+$HOME/ha-95598/data/login_qr_code.png
 $BASE/logs/*
 $BASE/local-backups/*
 "
