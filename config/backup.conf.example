@@ -43,10 +43,6 @@ $HOME/filebrowser/config
 $HOME/filebrowser/database
 $HOME/uptime-kuma/db-config.json
 $HOME/uptime-kuma/kuma.db
-$HOME/ha-95598/docker-compose.image.yml
-$HOME/ha-95598/.env
-$HOME/ha-95598/config
-$HOME/ha-95598/data
 $NETWORK_CONF_DIR/.env
 $NETWORK_CONF_DIR/docker-compose.yml
 $NETWORK_CONF_DIR/adguard/conf
@@ -87,9 +83,6 @@ $HOME/network/mihomo/config/GeoIP.dat
 $HOME/network/mihomo/config/GeoSite.dat
 $HOME/network/mihomo/config/cache.db
 $HOME/network/mihomo/config/geoip.metadb
-$HOME/ha-95598/data/captcha_samples
-$HOME/ha-95598/data/pages
-$HOME/ha-95598/data/login_qr_code.png
 $BASE/logs/*
 $BASE/local-backups/*
 "
