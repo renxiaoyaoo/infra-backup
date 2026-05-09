@@ -11,6 +11,7 @@ TS="$(date +%F-%H%M%S)"
 OUT_DIR="$LOCAL_BACKUP_DIR/pi"
 STAGE="$(mktemp -d /tmp/infra-backup-pi-$TS.XXXXXX)"
 OUT="$OUT_DIR/pi-infra-backup-$TS.tar.gz"
+OUT_TMP="$OUT.tmp"
 LOG="$LOG_DIR/pi-local-backup-$TS.log"
 
 mkdir -p "$OUT_DIR" "$STAGE" "$LOG_DIR"
@@ -18,6 +19,7 @@ chmod 700 "$LOCAL_BACKUP_DIR" "$OUT_DIR" "$LOG_DIR" 2>/dev/null || true
 chmod 700 "$STAGE" 2>/dev/null || true
 
 cleanup() {
+  rm -f "$OUT_TMP"
   rm -rf "$STAGE"
 }
 trap cleanup EXIT
@@ -52,6 +54,34 @@ trap cleanup EXIT
 $BACKUP_PATHS
 PATHS
 
+  STAGED_PATH_LIST="$STAGE/meta/staged-path-list.txt"
+  SKIP_PATH_LIST="$STAGE/meta/staged-skip-list.txt"
+  : > "$STAGED_PATH_LIST"
+  : > "$SKIP_PATH_LIST"
+
+  while IFS='|' read -r src dest; do
+    [ -z "${src:-}" ] && continue
+    [ -z "${dest:-}" ] && continue
+    if command -v docker >/dev/null 2>&1; then
+      stage_dest="$STAGE/rootfs/${dest#/}"
+      mkdir -p "$stage_dest"
+      if docker cp "$src/." "$stage_dest/"; then
+        echo "$dest" >> "$SKIP_PATH_LIST"
+        echo "${dest#/}" >> "$STAGED_PATH_LIST"
+      else
+        rm -rf "$stage_dest"
+      fi
+    fi
+  done <<CONTAINER_PATHS
+${CONTAINER_COPY_DIRS:-}
+CONTAINER_PATHS
+
+  if [ -s "$SKIP_PATH_LIST" ]; then
+    FILTERED_PATH_LIST="$STAGE/meta/path-list.filtered.txt"
+    grep -Fvx -f "$SKIP_PATH_LIST" "$PATH_LIST" > "$FILTERED_PATH_LIST" || true
+    PATH_LIST="$FILTERED_PATH_LIST"
+  fi
+
   if [ ! -s "$PATH_LIST" ]; then
     echo "ERROR: no configured backup paths exist"
     exit 1
@@ -69,35 +99,25 @@ PATHS
 
   echo "--- paths to backup ---"
   cat "$PATH_LIST"
-
-  DOCKER_PATH_LIST="$STAGE/meta/path-list.docker.txt"
-  DOCKER_EXCLUDE_FILE="$STAGE/meta/exclude-list.docker.txt"
-  sed 's#^/##' "$PATH_LIST" > "$DOCKER_PATH_LIST"
-  sed 's#^/##' "$EXCLUDE_FILE" > "$DOCKER_EXCLUDE_FILE"
-
-  if command -v docker >/dev/null 2>&1 && docker image inspect "${TAR_IMAGE:-caddy:2}" >/dev/null 2>&1; then
-    echo "--- archive mode: docker root readonly tar (${TAR_IMAGE:-caddy:2}) ---"
-    docker run --rm \
-      --network none \
-      -v /:/host:ro \
-      -v "$STAGE":/stage:ro \
-      --entrypoint tar \
-      "${TAR_IMAGE:-caddy:2}" \
-      -czf - \
-      -X /stage/meta/exclude-list.docker.txt \
-      -C /host \
-      -T /stage/meta/path-list.docker.txt \
-      -C /stage meta > "$OUT"
-  else
-    echo "--- archive mode: local tar ---"
-    tar \
-      --exclude-from="$EXCLUDE_FILE" \
-      -czf "$OUT" \
-      -T "$PATH_LIST" \
-      -C "$STAGE" meta
+  if [ -s "$STAGED_PATH_LIST" ]; then
+    echo "--- staged container paths ---"
+    cat "$STAGED_PATH_LIST"
   fi
 
-  chmod 600 "$OUT"
+  echo "--- archive mode: local tar with staged container copies ---"
+  tar_args=(
+    --exclude-from="$EXCLUDE_FILE"
+    -czf "$OUT_TMP"
+    -T "$PATH_LIST"
+  )
+  if [ -s "$STAGED_PATH_LIST" ]; then
+    tar_args+=(-C "$STAGE/rootfs" -T "$STAGED_PATH_LIST")
+  fi
+  tar_args+=(-C "$STAGE" meta)
+  tar "${tar_args[@]}"
+
+  chmod 600 "$OUT_TMP"
+  mv "$OUT_TMP" "$OUT"
 
   echo "--- result ---"
   ls -lh "$OUT"
