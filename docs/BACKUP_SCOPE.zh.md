@@ -28,7 +28,7 @@ chmod 600 config/backup.conf
 
 最近一次日常备份和清理日志在 `$BASE/logs`，本地 Pi 备份包在 `$BASE/local-backups/pi`。恢复测试通过时日志末尾会出现 `Restore test OK`。
 
-注意：部分 Docker volume 里的配置文件属于 root，例如 AdGuard Home 和 wg-easy 生成的文件。Pi 用户没有 sudo 免密权限，所以 Pi 本地备份会先用 `docker cp` 从正在运行的容器复制这些配置到临时 staging，再按原路径放进备份包。这样 cron 可以无人值守执行，同时不会修改被备份文件。
+注意：部分 Docker volume 里的配置文件属于 root，例如 Mosquitto、AdGuard Home 和 wg-easy 生成的文件。Pi 用户没有 sudo 免密权限，所以 Pi 本地备份会先用 `docker cp` 从正在运行的容器复制这些配置到临时 staging，再按原路径放进备份包。这样 cron 可以无人值守执行，同时不会修改被备份文件。
 
 ## 仓库里包含什么
 

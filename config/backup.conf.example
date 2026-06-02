@@ -17,6 +17,7 @@ HOME_STACK_DIR="${HOME_STACK_DIR:-$HOME/apps/services}"
 CADDY_CONF="${CADDY_CONF:-$NETWORK_CONF_DIR/caddy/Caddyfile}"
 
 CONTAINER_COPY_DIRS="
+mosquitto:/mosquitto/data|$HOME_STACK_DIR/mosquitto/data
 adguardhome:/opt/adguardhome/conf|$NETWORK_CONF_DIR/adguard/conf
 wg-easy:/etc/wireguard|$NETWORK_CONF_DIR/wg-easy/data
 "
