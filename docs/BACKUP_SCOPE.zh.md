@@ -8,7 +8,7 @@
 
 `raspberry-conf` 可以逐步退役，但不要直接拿 `infra-backup` 当服务运行目录。更合理的方式是：
 
-- 运行时配置继续放在树莓派实际路径，例如 `/home/pi/apps/services/docker-compose.yml`、`/home/pi/apps/services/ha/config`。
+- 运行时配置继续放在树莓派实际路径，例如 `$HOME/apps/services/docker-compose.yml`、`$HOME/apps/services/ha/config`。
 - `infra-backup` 负责把这些实际路径打包、验证、上传。
 - 等确认恢复流程足够可靠后，再决定是否删除 `raspberry-conf` 这个历史仓库。
 
@@ -29,9 +29,9 @@ chmod 600 config/backup.conf
 
 验证结果：
 
-- 生成 Pi 本地备份包：`/home/pi/apps/ops/infra-backup/local-backups/pi/pi-infra-backup-2026-05-10-032548.tar.gz`
-- 生成备份日志：`/home/pi/apps/ops/infra-backup/logs/pi-local-backup-2026-05-10-032548.log`
-- 生成恢复验证日志：`/home/pi/apps/ops/infra-backup/logs/restore-test-2026-05-10-032614.log`
+- 生成 Pi 本地备份包：`$BASE/local-backups/pi/pi-infra-backup-2026-05-10-032548.tar.gz`
+- 生成备份日志：`$BASE/logs/pi-local-backup-2026-05-10-032548.log`
+- 生成恢复验证日志：`$BASE/logs/restore-test-2026-05-10-032614.log`
 - 恢复测试成功，备份包可以解开并列出关键文件。
 
 注意：部分 Docker volume 里的配置文件属于 root，例如 AdGuard Home 和 wg-easy 生成的文件。Pi 用户没有 sudo 免密权限，所以 Pi 本地备份会先用 `docker cp` 从正在运行的容器复制这些配置到临时 staging，再按原路径放进备份包。这样 cron 可以无人值守执行，同时不会修改被备份文件。
@@ -64,68 +64,68 @@ chmod 600 config/backup.conf
 
 ### 服务入口
 
-- `/home/pi/apps/services/docker-compose.yml`
-- `/home/pi/apps/services/.env`
+- `$HOME/apps/services/docker-compose.yml`
+- `$HOME/apps/services/.env`
 
 这两个文件决定主服务栈如何启动，以及容器使用哪些环境变量。需要备份。
 
 ### 主 compose 里的其它服务状态
 
-- `/home/pi/network/cloudflared`
-- `/home/pi/apps/services/filebrowser/config`
-- `/home/pi/apps/services/filebrowser/database`
-- `/home/pi/apps/services/uptime-kuma/db-config.json`
-- `/home/pi/apps/services/uptime-kuma/kuma.db`
+- `$HOME/network/cloudflared`
+- `$HOME/apps/services/filebrowser/config`
+- `$HOME/apps/services/filebrowser/database`
+- `$HOME/apps/services/uptime-kuma/db-config.json`
+- `$HOME/apps/services/uptime-kuma/kuma.db`
 
-这些路径来自 `/home/pi/network/docker-compose.yml` 和 `/home/pi/apps/services/docker-compose.yml` 里的实际 volume。`cloudflared` 当前主要靠 `.env` 里的 token 启动，但保留目录可以覆盖以后切回本地配置文件的情况。Filebrowser 和 Uptime Kuma 的配置、数据库需要备份。
+这些路径来自 `$HOME/network/docker-compose.yml` 和 `$HOME/apps/services/docker-compose.yml` 里的实际 volume。`cloudflared` 当前主要靠 `.env` 里的 token 启动，但保留目录可以覆盖以后切回本地配置文件的情况。Filebrowser 和 Uptime Kuma 的配置、数据库需要备份。
 
 ### Home Assistant
 
-- `/home/pi/apps/services/ha/Dockerfile.ha`
-- `/home/pi/apps/services/ha/config/configuration.yaml`
-- `/home/pi/apps/services/ha/config/secrets.yaml`
-- `/home/pi/apps/services/ha/config/automations.yaml`
-- `/home/pi/apps/services/ha/config/scripts.yaml`
-- `/home/pi/apps/services/ha/config/scenes.yaml`
-- `/home/pi/apps/services/ha/config/backups`
+- `$HOME/apps/services/ha/Dockerfile.ha`
+- `$HOME/apps/services/ha/config/configuration.yaml`
+- `$HOME/apps/services/ha/config/secrets.yaml`
+- `$HOME/apps/services/ha/config/automations.yaml`
+- `$HOME/apps/services/ha/config/scripts.yaml`
+- `$HOME/apps/services/ha/config/scenes.yaml`
+- `$HOME/apps/services/ha/config/backups`
 
 Home Assistant 的 YAML、密钥、自动化、脚本、场景都属于恢复核心。`backups` 目录也要保留，因为它能帮助从 HA 自己的备份中恢复集成和状态。
 
 ### Mosquitto
 
-- `/home/pi/apps/services/mosquitto/config`
-- `/home/pi/apps/services/mosquitto/data`
+- `$HOME/apps/services/mosquitto/config`
+- `$HOME/apps/services/mosquitto/data`
 
 MQTT broker 的配置和持久数据需要备份，否则 Zigbee2MQTT、HA 和其它 MQTT 客户端恢复后可能连不上或状态丢失。
 
 ### Zigbee2MQTT
 
-- `/home/pi/apps/services/zigbee2mqtt/data/configuration.yaml`
-- `/home/pi/apps/services/zigbee2mqtt/data/coordinator_backup.json`
-- `/home/pi/apps/services/zigbee2mqtt/data/database.db`
-- `/home/pi/apps/services/zigbee2mqtt/data/state.json`
-- `/home/pi/apps/services/zigbee2mqtt/data/external_converters`
+- `$HOME/apps/services/zigbee2mqtt/data/configuration.yaml`
+- `$HOME/apps/services/zigbee2mqtt/data/coordinator_backup.json`
+- `$HOME/apps/services/zigbee2mqtt/data/database.db`
+- `$HOME/apps/services/zigbee2mqtt/data/state.json`
+- `$HOME/apps/services/zigbee2mqtt/data/external_converters`
 
 这些文件决定 Zigbee 网络、设备映射、协调器备份、设备状态和自定义转换器。需要备份。
 
 ### ddns-go
 
-- `/home/pi/network/ddns-go/.ddns_go_config.yaml`
+- `$HOME/network/ddns-go/.ddns_go_config.yaml`
 
 树莓派上的 ddns-go 配置以这个实际路径为准。Mac 上的 ddns-go 配置不要覆盖这里。
 
 ### network 服务栈
 
-- `/home/pi/network/.env`
-- `/home/pi/network/docker-compose.yml`
-- `/home/pi/network/adguard/conf`
-- `/home/pi/network/wg-easy/data`
-- `/home/pi/network/mihomo/config/config.yaml`
-- `/home/pi/network/mihomo/config/proxies`
-- `/home/pi/network/mihomo/config/rules`
-- `/home/pi/network/caddy/Caddyfile`
+- `$HOME/network/.env`
+- `$HOME/network/docker-compose.yml`
+- `$HOME/network/adguard/conf`
+- `$HOME/network/wg-easy/data`
+- `$HOME/network/mihomo/config/config.yaml`
+- `$HOME/network/mihomo/config/proxies`
+- `$HOME/network/mihomo/config/rules`
+- `$HOME/network/caddy/Caddyfile`
 
-这些文件决定 network compose、AdGuard Home 配置、WireGuard 配置、mihomo 规则和 Caddy 入口。需要备份。`/home/pi/network/adguard/work` 当前体积较大，主要是运行数据和统计，不纳入默认关键配置备份。
+这些文件决定 network compose、AdGuard Home 配置、WireGuard 配置、mihomo 规则和 Caddy 入口。需要备份。`$HOME/network/adguard/work` 当前体积较大，主要是运行数据和统计，不纳入默认关键配置备份。
 
 ### 系统级 glue 文件
 
@@ -178,7 +178,7 @@ OpenWrt 备份内容包括：
 
 不要把这些东西加入 `BACKUP_PATHS`：
 
-- 整个 `/home/pi`
+- 整个 `$HOME`
 - 整个 docker volume 目录
 - Docker 镜像和容器层
 - 下载目录、媒体库、前端构建产物
@@ -198,7 +198,7 @@ OpenWrt 备份内容包括：
 
 ## 和 raspberry-conf 的边界
 
-当前树莓派主服务栈运行目录是 `/home/pi/apps/services`。
+当前树莓派主服务栈运行目录是 `$HOME/apps/services`。
 
 如果继续保留 `raspberry-conf`，它只能表达“树莓派当前服务栈配置长什么样”。但它容易和真实运行文件脱节，也容易把运行目录变成一个很脏的 Git worktree。
 
