@@ -14,7 +14,7 @@ OPENWRT_LOCAL_DIR="$LOCAL_BACKUP_DIR/openwrt"
 
 NETWORK_CONF_DIR="${NETWORK_CONF_DIR:-$HOME/network}"
 HOME_STACK_DIR="${HOME_STACK_DIR:-$HOME/apps/services}"
-CADDY_CONF="${CADDY_CONF:-$HOME_STACK_DIR/caddy/Caddyfile}"
+CADDY_CONF="${CADDY_CONF:-$NETWORK_CONF_DIR/caddy/Caddyfile}"
 
 CONTAINER_COPY_DIRS="
 adguardhome:/opt/adguardhome/conf|$NETWORK_CONF_DIR/adguard/conf
@@ -24,7 +24,6 @@ wg-easy:/etc/wireguard|$NETWORK_CONF_DIR/wg-easy/data
 BACKUP_PATHS="
 $HOME_STACK_DIR/docker-compose.yml
 $HOME_STACK_DIR/.env
-$HOME_STACK_DIR/cloudflared
 $HOME_STACK_DIR/ha/Dockerfile.ha
 $HOME_STACK_DIR/ha/config/configuration.yaml
 $HOME_STACK_DIR/ha/config/secrets.yaml
@@ -39,13 +38,14 @@ $HOME_STACK_DIR/zigbee2mqtt/data/coordinator_backup.json
 $HOME_STACK_DIR/zigbee2mqtt/data/database.db
 $HOME_STACK_DIR/zigbee2mqtt/data/state.json
 $HOME_STACK_DIR/zigbee2mqtt/data/external_converters
-$HOME_STACK_DIR/ddns-go/.ddns_go_config.yaml
 $HOME_STACK_DIR/filebrowser/config
 $HOME_STACK_DIR/filebrowser/database
 $HOME_STACK_DIR/uptime-kuma/db-config.json
 $HOME_STACK_DIR/uptime-kuma/kuma.db
 $NETWORK_CONF_DIR/.env
 $NETWORK_CONF_DIR/docker-compose.yml
+$NETWORK_CONF_DIR/cloudflared
+$NETWORK_CONF_DIR/ddns-go/.ddns_go_config.yaml
 $NETWORK_CONF_DIR/adguard/conf
 $NETWORK_CONF_DIR/wg-easy/data
 $NETWORK_CONF_DIR/mihomo/config/config.yaml
