@@ -1,6 +1,6 @@
 # infra-backup config example
 
-BASE="${BASE:-${INFRA_BACKUP_BASE:-$HOME/infra-backup}}"
+BASE="${BASE:-${INFRA_BACKUP_BASE:-$HOME/apps/infra-backup}}"
 
 CONFIG_DIR="$BASE/config"
 SCRIPT_DIR="$BASE/scripts"
@@ -13,7 +13,8 @@ OPENWRT_REMOTE_DIR="/root/infra-backup"
 OPENWRT_LOCAL_DIR="$LOCAL_BACKUP_DIR/openwrt"
 
 NETWORK_CONF_DIR="${NETWORK_CONF_DIR:-$HOME/network}"
-CADDY_CONF="${CADDY_CONF:-$HOME/caddy/Caddyfile}"
+HOME_STACK_DIR="${HOME_STACK_DIR:-$HOME/apps/home-stack}"
+CADDY_CONF="${CADDY_CONF:-$HOME_STACK_DIR/caddy/Caddyfile}"
 
 CONTAINER_COPY_DIRS="
 adguardhome:/opt/adguardhome/conf|$NETWORK_CONF_DIR/adguard/conf
@@ -21,28 +22,28 @@ wg-easy:/etc/wireguard|$NETWORK_CONF_DIR/wg-easy/data
 "
 
 BACKUP_PATHS="
-$HOME/docker-compose.yml
-$HOME/.env
+$HOME_STACK_DIR/docker-compose.yml
+$HOME_STACK_DIR/.env
 $HOME/.cloudflared
-$HOME/ha/Dockerfile.ha
-$HOME/ha/config/configuration.yaml
-$HOME/ha/config/secrets.yaml
-$HOME/ha/config/automations.yaml
-$HOME/ha/config/scripts.yaml
-$HOME/ha/config/scenes.yaml
-$HOME/ha/config/backups
-$HOME/mosquitto/config
-$HOME/mosquitto/data
-$HOME/zigbee2mqtt/data/configuration.yaml
-$HOME/zigbee2mqtt/data/coordinator_backup.json
-$HOME/zigbee2mqtt/data/database.db
-$HOME/zigbee2mqtt/data/state.json
-$HOME/zigbee2mqtt/data/external_converters
+$HOME_STACK_DIR/ha/Dockerfile.ha
+$HOME_STACK_DIR/ha/config/configuration.yaml
+$HOME_STACK_DIR/ha/config/secrets.yaml
+$HOME_STACK_DIR/ha/config/automations.yaml
+$HOME_STACK_DIR/ha/config/scripts.yaml
+$HOME_STACK_DIR/ha/config/scenes.yaml
+$HOME_STACK_DIR/ha/config/backups
+$HOME_STACK_DIR/mosquitto/config
+$HOME_STACK_DIR/mosquitto/data
+$HOME_STACK_DIR/zigbee2mqtt/data/configuration.yaml
+$HOME_STACK_DIR/zigbee2mqtt/data/coordinator_backup.json
+$HOME_STACK_DIR/zigbee2mqtt/data/database.db
+$HOME_STACK_DIR/zigbee2mqtt/data/state.json
+$HOME_STACK_DIR/zigbee2mqtt/data/external_converters
 $HOME/.ddns-go/.ddns_go_config.yaml
-$HOME/filebrowser/config
-$HOME/filebrowser/database
-$HOME/uptime-kuma/db-config.json
-$HOME/uptime-kuma/kuma.db
+$HOME_STACK_DIR/filebrowser/config
+$HOME_STACK_DIR/filebrowser/database
+$HOME_STACK_DIR/uptime-kuma/db-config.json
+$HOME_STACK_DIR/uptime-kuma/kuma.db
 $NETWORK_CONF_DIR/.env
 $NETWORK_CONF_DIR/docker-compose.yml
 $NETWORK_CONF_DIR/adguard/conf
