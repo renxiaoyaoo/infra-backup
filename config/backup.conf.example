@@ -1,6 +1,6 @@
 # infra-backup config example
 
-BASE="${BASE:-${INFRA_BACKUP_BASE:-$HOME/apps/infra-backup}}"
+BASE="${BASE:-${INFRA_BACKUP_BASE:-$HOME/apps/ops/infra-backup}}"
 
 CONFIG_DIR="$BASE/config"
 SCRIPT_DIR="$BASE/scripts"
@@ -13,7 +13,7 @@ OPENWRT_REMOTE_DIR="/root/infra-backup"
 OPENWRT_LOCAL_DIR="$LOCAL_BACKUP_DIR/openwrt"
 
 NETWORK_CONF_DIR="${NETWORK_CONF_DIR:-$HOME/network}"
-HOME_STACK_DIR="${HOME_STACK_DIR:-$HOME/apps/home-stack}"
+HOME_STACK_DIR="${HOME_STACK_DIR:-$HOME/apps/services}"
 CADDY_CONF="${CADDY_CONF:-$HOME_STACK_DIR/caddy/Caddyfile}"
 
 CONTAINER_COPY_DIRS="
