@@ -24,7 +24,7 @@ wg-easy:/etc/wireguard|$NETWORK_CONF_DIR/wg-easy/data
 BACKUP_PATHS="
 $HOME_STACK_DIR/docker-compose.yml
 $HOME_STACK_DIR/.env
-$HOME/.cloudflared
+$HOME_STACK_DIR/cloudflared
 $HOME_STACK_DIR/ha/Dockerfile.ha
 $HOME_STACK_DIR/ha/config/configuration.yaml
 $HOME_STACK_DIR/ha/config/secrets.yaml
@@ -39,7 +39,7 @@ $HOME_STACK_DIR/zigbee2mqtt/data/coordinator_backup.json
 $HOME_STACK_DIR/zigbee2mqtt/data/database.db
 $HOME_STACK_DIR/zigbee2mqtt/data/state.json
 $HOME_STACK_DIR/zigbee2mqtt/data/external_converters
-$HOME/.ddns-go/.ddns_go_config.yaml
+$HOME_STACK_DIR/ddns-go/.ddns_go_config.yaml
 $HOME_STACK_DIR/filebrowser/config
 $HOME_STACK_DIR/filebrowser/database
 $HOME_STACK_DIR/uptime-kuma/db-config.json
