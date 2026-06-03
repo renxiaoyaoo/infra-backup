@@ -54,6 +54,21 @@ trap cleanup EXIT
 $BACKUP_PATHS
 PATHS
 
+  while IFS='|' read -r dir pattern; do
+    [ -z "${dir:-}" ] && continue
+    [ -z "${pattern:-}" ] && continue
+    latest_file="$(
+      find "$dir" -maxdepth 1 -type f -name "$pattern" -printf '%T@ %p\n' 2>/dev/null \
+        | sort -nr \
+        | awk 'NR == 1 { $1=""; sub(/^ /, ""); print }'
+    )"
+    [ -n "$latest_file" ] && echo "$latest_file" >> "$PATH_LIST"
+  done <<LATEST_FILES
+${LATEST_FILE_DIRS:-}
+LATEST_FILES
+
+  sort -u "$PATH_LIST" -o "$PATH_LIST"
+
   STAGED_PATH_LIST="$STAGE/meta/staged-path-list.txt"
   SKIP_PATH_LIST="$STAGE/meta/staged-skip-list.txt"
   : > "$STAGED_PATH_LIST"

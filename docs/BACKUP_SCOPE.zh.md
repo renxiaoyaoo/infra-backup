@@ -83,9 +83,9 @@ chmod 600 config/backup.conf
 - `$HOME/apps/services/ha/config/automations.yaml`
 - `$HOME/apps/services/ha/config/scripts.yaml`
 - `$HOME/apps/services/ha/config/scenes.yaml`
-- `$HOME/apps/services/ha/config/backups`
+- `$HOME/apps/services/ha/config/backups` 中最新一份 `.tar`
 
-Home Assistant 的 YAML、密钥、自动化、脚本、场景都属于恢复核心。`backups` 目录也要保留，因为它能帮助从 HA 自己的备份中恢复集成和状态。
+Home Assistant 的 YAML、密钥、自动化、脚本、场景都属于恢复核心。HA 自带备份 `.tar` 有恢复价值，但只保留最新一份进基础设施备份，避免历史 HA 备份把整个 Pi 备份包撑大。
 
 ### Mosquitto
 

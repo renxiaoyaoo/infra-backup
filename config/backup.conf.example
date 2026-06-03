@@ -31,7 +31,6 @@ $HOME_STACK_DIR/ha/config/secrets.yaml
 $HOME_STACK_DIR/ha/config/automations.yaml
 $HOME_STACK_DIR/ha/config/scripts.yaml
 $HOME_STACK_DIR/ha/config/scenes.yaml
-$HOME_STACK_DIR/ha/config/backups
 $HOME_STACK_DIR/mosquitto/config
 $HOME_STACK_DIR/mosquitto/data
 $HOME_STACK_DIR/zigbee2mqtt/data/configuration.yaml
@@ -60,6 +59,10 @@ $CADDY_CONF
 /etc/cron.d
 /usr/local/bin/mihomo-gateway.sh
 /usr/local/bin/mihomo-tproxy-route.sh
+"
+
+LATEST_FILE_DIRS="
+$HOME_STACK_DIR/ha/config/backups|*.tar
 "
 
 BACKUP_SCAN_ROOTS="$HOME /usr/local/bin /etc/systemd/system"
