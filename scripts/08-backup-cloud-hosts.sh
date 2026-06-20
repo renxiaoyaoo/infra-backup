@@ -15,11 +15,16 @@ chmod 700 "$OUT_DIR" "$LOG_DIR" 2>/dev/null || true
 
 {
   echo "===== Cloud backup start: $TS ====="
+  paths="$(printf '%s\n' "$CLOUD_BACKUP_PATHS" | awk 'NF {printf "%s ", $0}')"
+  if [ -z "$paths" ]; then
+    echo "ERROR: no cloud backup paths configured"
+    exit 1
+  fi
   for host in ${CLOUD_HOSTS:-}; do
     out="$OUT_DIR/${host}-infra-backup-$TS.tar.gz"
     tmp="$out.tmp"
     echo "--- $host ---"
-    ssh "$host" "tar -C \"\$HOME\" -czf - ${CLOUD_BACKUP_PATHS}" > "$tmp"
+    ssh "$host" "tar -C \"\$HOME\" -czf - $paths" > "$tmp"
     chmod 600 "$tmp"
     mv "$tmp" "$out"
     tar -tzf "$out" >/dev/null
