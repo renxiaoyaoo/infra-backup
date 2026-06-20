@@ -25,6 +25,10 @@ trap 'rm -f "$RESTIC_ERR"' EXIT
 
 [ -n "$LATEST_PI" ] && RESTIC_SOURCES+=("$LATEST_PI")
 [ -n "$LATEST_OPENWRT" ] && RESTIC_SOURCES+=("$LATEST_OPENWRT")
+for host in ${CLOUD_HOSTS:-}; do
+  latest_cloud="$(find "${CLOUD_BACKUP_DIR:-$LOCAL_BACKUP_DIR/cloud}" -maxdepth 1 -type f -name "${host}-infra-backup-*.tar.gz" 2>/dev/null | sort | tail -1 || true)"
+  [ -n "$latest_cloud" ] && RESTIC_SOURCES+=("$latest_cloud")
+done
 
 mkdir -p "$LOG_DIR"
 
@@ -34,6 +38,10 @@ mkdir -p "$LOG_DIR"
   [ -n "$LATEST_PI" ] && echo "$LATEST_PI" || echo "none"
   echo "--- latest openwrt backup ---"
   [ -n "$LATEST_OPENWRT" ] && echo "$LATEST_OPENWRT" || echo "none"
+  echo "--- latest cloud backups ---"
+  for host in ${CLOUD_HOSTS:-}; do
+    find "${CLOUD_BACKUP_DIR:-$LOCAL_BACKUP_DIR/cloud}" -maxdepth 1 -type f -name "${host}-infra-backup-*.tar.gz" 2>/dev/null | sort | tail -1 || echo "$host: none"
+  done
 
   if ! "${RESTIC_CMD[@]}" snapshots >/dev/null 2>"$RESTIC_ERR"; then
     if grep -qi 'repository does not exist' "$RESTIC_ERR"; then

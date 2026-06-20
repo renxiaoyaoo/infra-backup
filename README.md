@@ -14,6 +14,7 @@
 
 - 保存本项目代码、配置、日志和本地备份包
 - 通过 SSH 触发 OpenWrt 备份
+- 通过 SSH 归档 `0`、`1` 的服务配置
 - 用 restic 把最新本地备份包上传到远端存储
 - 用 cron 定时执行日常备份
 
@@ -108,6 +109,8 @@ OpenWrt 备份包括：
 - `iptables-save`、`ip rule`、table 100 路由
 - `uci export`、`opkg list-installed`
 
+云主机备份只包括 compose、`.env`、证书和 cloudflared 配置；不包括容器 volume、日志、缓存或项目代码。
+
 ## 脚本
 
 - `scripts/00-inventory.sh`：清点 systemd、cron、docker、compose、备份相关脚本。
@@ -115,6 +118,7 @@ OpenWrt 备份包括：
 - `scripts/02-backup-pi-local.sh`：把树莓派关键配置打成本地 tar.gz。
 - `scripts/06-backup-all.sh`：把日常备份串起来，按顺序跑一遍。
 - `scripts/07-install-cron.sh`：安装日常自动化 cron。
+- `scripts/08-backup-cloud-hosts.sh`：归档 `0`、`1` 的服务配置。
 - `scripts/openwrt/upload-openwrt.sh`：把本地 `scripts/openwrt/` 下的 OpenWrt 原件同步到路由器。
 - `scripts/03-restic-backup-r2.sh`：把最新本地 Pi / OpenWrt 备份上传到 R2 restic 仓库。
 - `scripts/04-restic-check.sh`：检查 restic 仓库。

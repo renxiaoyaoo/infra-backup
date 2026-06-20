@@ -7,11 +7,13 @@ scripts/openwrt/config.env
 logs/*
 local-backups/pi/*
 local-backups/openwrt/*
+local-backups/cloud/*
 
 # keep empty dirs
 !logs/.gitkeep
 !local-backups/pi/.gitkeep
 !local-backups/openwrt/.gitkeep
+!local-backups/cloud/.gitkeep
 
 # local/editor noise
 .DS_Store

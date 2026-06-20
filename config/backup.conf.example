@@ -11,6 +11,18 @@ RESTORE_DIR="$BASE/restore"
 OPENWRT_HOST="root@openwrt.lan"
 OPENWRT_REMOTE_DIR="/root/infra-backup"
 OPENWRT_LOCAL_DIR="$LOCAL_BACKUP_DIR/openwrt"
+CLOUD_BACKUP_DIR="$LOCAL_BACKUP_DIR/cloud"
+
+# SSH aliases for small cloud service hosts. Their compose files and secrets
+# are archived locally and encrypted by the existing restic upload step.
+CLOUD_HOSTS="0 1"
+CLOUD_BACKUP_PATHS="
+.env
+docker-compose.yml
+cert
+cloudflared/.env
+cloudflared/docker-compose.yml
+"
 
 NETWORK_CONF_DIR="${NETWORK_CONF_DIR:-$HOME/network}"
 HOME_STACK_DIR="${HOME_STACK_DIR:-$HOME/apps/services}"
@@ -95,6 +107,7 @@ $BASE/local-backups/*
 
 KEEP_LOCAL_OPENWRT=3
 KEEP_LOCAL_PI=3
+KEEP_LOCAL_CLOUD=3
 
 KEEP_DAILY=3
 KEEP_WEEKLY=1
